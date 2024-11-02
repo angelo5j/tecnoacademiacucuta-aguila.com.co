@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CHAT-BOT CAMPESENA</title>
+  <link rel="shortcut icon" href="portada.png" type="image/x-icon">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #333;
+    }
+
+    #form-container, #chat-container, #final-form {
+      background-color: #ffffff;
+      width: 400px;
+      border-radius: 15px;
+      box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    #form-container {
+      animation: fadeIn 0.5s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    #chat-container {
+      display: none;
+      opacity: 0;
+      transform: translateY(20px);
+      height: 500px;
+    }
+
+    #final-form {
+      display: none;
+    }
+
+    h3 {
+      text-align: center;
+      color: #a200ff;
+      margin-bottom: 20px;
+      font-size: 24px;
+      font-weight: 600;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    span {
+      color: #39a900;
+      font-weight: bold;
+    }
+
+    input, textarea {
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    input:focus, textarea:focus {
+      background-color: #e9e9e9;;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+
+    h4 {
+      color: #a200ff;
+      text-align: center;
+      font-size: 1.5em;
+      margin-bottom: 20px;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    #submit-btn, #send-btn, #final-submit-btn {
+      background-color: #a200ff;
+      color: white;
+      border: none;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    #submit-btn:hover, #send-btn:hover, #final-submit-btn:hover {
+      background-color: #39a900;
+      box-shadow: 0px 4px 8px rgba(0, 91, 187, 0.3);
+    }
+
+    #chatbox {
+      flex-grow: 1;
+      padding: 20px;
+      background-color: #f7f7f9;
+      overflow-y: auto;
+      height: 300px;
+      border-bottom: 1px solid #ddd;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    #chatbox p {
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 12px;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    #chatbox p strong {
+      font-weight: bold;
+    }
+
+    #chatbox p:nth-child(odd) {
+      background-color: #e3f2fd;
+      align-self: flex-start;
+      text-align: left;
+      color: #6c757d; /* Color para los mensajes del usuario */
+    }
+
+    #chatbox p:nth-child(even) {
+      background-color: #e9e9e9;
+      align-self: flex-end;
+      text-align: right;
+      color: #000000; /* Color del bot en amarillo claro */
+    }
+
+    #input-container {
+      display: flex;
+      border-top: 1px solid #ddd;
+      padding: 10px;
+      background-color: #fff;
+      border-radius: 10px;
+    }
+
+    #user-input {
+      flex-grow: 1;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 16px;
+      outline: none;
+      margin-right: 10px;
+      transition: border-color 0.3s ease;
+    }
+
+    #user-input:focus {
+      border-color: #007bff;
+    }
+
+    /* Loader */
+    .loader {
+      display: none; /* Inicialmente oculto */
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 5px;
+      height: 100%; /* Para centrar en el contenedor */
+    }
+
+    .loading-text {
+      color: rgb(0, 0, 0);
+      font-size: 10pt;
+      font-weight: 600;
+      margin-left: 10px;
+    }
+
+    .dot {
+      margin-left: 3px;
+      animation: blink 1.5s infinite;
+    }
+    .dot:nth-child(2) {
+      animation-delay: 0.3s;
+    }
+    .dot:nth-child(3) {
+      animation-delay: 0.6s;
+    }
+
+    .loading-bar-background {
+      --height: 30px;
+      display: flex;
+      align-items: center;
+      box-sizing: border-box;
+      padding: 5px;
+      width: 200px;
+      height: var(--height);
+      background-color: #212121;
+      box-shadow: #0c0c0c -2px 2px 4px 0px inset;
+      border-radius: calc(var(--height) / 2);
+    }
+
+    .loading-bar {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      --height: 20px;
+      width: 0%;
+      height: var(--height);
+      overflow: hidden;
+      background: rgb(222, 74, 15);
+      background: linear-gradient(
+        0deg,
+        rgb(230, 0, 255) 0%,
+        rgb(0, 255, 30) 100%
+      );
+      border-radius: calc(var(--height) / 2);
+      animation: loading 4s ease-out infinite;
+    }
+
+    .white-bars-container {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .white-bar {
+      background: rgb(255, 255, 255);
+      background: linear-gradient(
+        -45deg,
+        rgba(255, 255, 255, 1) 0%,
+        rgba(255, 255, 255, 0) 70%
+      );
+      width: 10px;
+      height: 45px;
+      opacity: 0.3;
+      rotate: 45deg;
+    }
+
+
+
+
+/* Estilos para dispositivos móviles */
+@media (max-width: 600px) {
+  body {
+    padding: 10px;
+    height: auto;
+  }
+
+  #form-container, #chat-container, #final-form {
+    width: 100%;
+    padding: 15px;
+    box-shadow: none; /* Eliminar sombra en pantallas móviles si se desea */
+  }
+
+  #chatbox {
+    height: 250px; /* Reducir el tamaño del chatbox en móviles */
+  }
+
+  h3, h4 {
+    font-size: 20px;
+  }
+
+  input, textarea, button {
+    font-size: 14px; /* Reducir un poco el tamaño del texto */
+    padding: 10px;
+  }
+
+  #user-input {
+    margin-right: 5px;
+  }
+
+  .loader {
+    width: 100%;
+  }
+
+  .loading-bar-background {
+    width: 150px; /* Ajustar la barra de carga para móviles */
+    height: 25px;
+  }
+
+  .loading-bar {
+    height: 15px; /* Reducir el tamaño de la barra de carga */
+  }
+
+  .white-bar {
+    height: 35px; /* Reducir la altura de las barras blancas */
+  }
+
+  .ec-stars-wrapper {
+    font-size: 24px; /* Reducir tamaño de estrellas de calificación */
+  }
+
+  /* Ajustar el contenedor de calificación */
+  .a {
+    margin-left: 0;
+    text-align: center;
+  }
+}
+
+
+
+
+
+
+
+
+    @keyframes loading {
+      0% {
+        width: 0;
+      }
+      80% {
+        width: 100%;
+      }
+      100% {
+        width: 100%;
+      }
+    }
+
+    @keyframes blink {
+      0%,
+      100% {
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
+    }.ec-stars-wrapper {
+      font-size: 0;
+      display: inline-block;
+      margin-top: 20px; /* Espacio superior para separación */
+    }
+    .ec-stars-wrapper a {
+      text-decoration: none;
+      display: inline-block;
+      font-size: 32px;
+      color: #888;
+    }
+    .ec-stars-wrapper:hover a {
+      color: #09a900;
+    }
+    .ec-stars-wrapper > a:hover ~ a {
+      color: #888;
+    }
+    .a{
+margin-left: 20px;
+
+
+    }
+  </style>
+</head>
+<body>
+  <!-- Formulario inicial -->
+  <div id="form-container">
+    <h3>CAMPE <span>SENA</span></h3>
+    <input type="text" id="user-name" placeholder="Ingresa tu nombre" required />
+    <input type="text" id="pet-name" placeholder="Especie de animal" required />
+    <input type="number" id="pet-age" placeholder="Edad del animal" required />
+    <button id="submit-btn">INICIAR CHAT-BOT</button>
+  </div>
+
+  <!-- Loader -->
+  <div class="loader" id="loader-container">
+    <div class="loading-text">
+      INICIANDO CHAT-BOT CAMPESENA<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span>
+    </div>
+    <div class="loading-bar-background">
+      <div class="loading-bar">
+        <div class="white-bars-container">
+          <div class="white-bar"></div>
+          <div class="white-bar"></div>
+          <div class="white-bar"></div>
+          <div class="white-bar"></div>
+          <div class="white-bar"></div>
+          <div class="white-bar"></div>
+          <div class="white-bar"></div>
+          <div class="white-bar"></div>
+          <div class="white-bar"></div>
+          <div class="white-bar"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenedor del Chat -->
+  <div id="chat-container">
+    <h4>TECNOACADEMIA <span>C&Uacute;CUTA</span></h4>
+    <div id="chatbox"></div>
+    <div id="input-container">
+      <input type="text" id="user-input" placeholder="Escribe un mensaje" />
+      <button id="send-btn">Enviar</button>
+    </div>
+    <div class="a">
+    <div id="rating-container" style="display: none;">
+      <div class="ec-stars-wrapper">
+        <a href="#" data-value="1" title="Votar con 1 estrella">&#9733;</a>
+        <a href="#" data-value="2" title="Votar con 2 estrellas">&#9733;</a>
+        <a href="#" data-value="3" title="Votar con 3 estrellas">&#9733;</a>
+        <a href="#" data-value="4" title="Votar con 4 estrellas">&#9733;</a>
+        <a href="#" data-value="5" title="Votar con 5 estrellas">&#9733;</a>
+      </div>
+      <noscript>Necesitas tener habilitado JavaScript para poder votar</noscript>
+    </div>
+  </div></div>
+
+  <script>
+    let formContainer = document.getElementById("form-container");
+    let chatContainer = document.getElementById("chat-container");
+    let chatbox = document.getElementById("chatbox");
+    let sendBtn = document.getElementById("send-btn");
+    let userInput = document.getElementById("user-input");
+    let loaderContainer = document.getElementById("loader-container");
+    let ratingContainer = document.getElementById("rating-container");
+  
+    let userName = "";
+    let petName = "";
+    let petAge = 0;
+  
+    let yesNoQuestions = [
+      "¿Tu animal come bien?",
+      "¿Ha estado bebiendo suficiente agua?",
+      "¿Tu animal tiene fiebre?",
+      "¿Ha notado cambios en su comportamiento?",
+      "¿Tu animal está vacunado?",
+      "¿Ha perdido peso recientemente?",
+      "¿Tiene heridas visibles?",
+      "¿Tu animal se rasca mucho?",
+      "¿Tiene parásitos?",
+      "¿Se ha caído o lastimado recientemente?"
+    ];
+
+
+
+    let currentQuestionIndex = 0;
+    let userResponses = [];
+  
+    function scrollToBottom() {
+      chatbox.scrollTop = chatbox.scrollHeight;
+    }
+  
+    document.getElementById("submit-btn").addEventListener("click", function() {
+    userName = document.getElementById("user-name").value.trim();
+    petName = document.getElementById("pet-name").value.trim();
+    petAge = document.getElementById("pet-age").value.trim();
+
+    const lettersOnlyPattern = /^[a-zA-Z\s]+$/;
+
+    // Validación para evitar números en el nombre del usuario y la especie
+    if (!lettersOnlyPattern.test(userName)) {
+      Swal.fire("El nombre solo debe contener letras.");
+      return;
+    }
+
+    if (!lettersOnlyPattern.test(petName)) {
+      Swal.fire("La especie de animal solo debe contener letras.");
+      return;
+    }
+
+    if (petAge > 20) {
+      Swal.fire("Tu animal debe tener menos de 20 años.");
+      return;
+    }
+
+    if (userName === "" || petName === "" || petAge === "") {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Completa todos los campos",
+      });
+      return;
+    }
+
+    formContainer.style.display = "none";
+    loaderContainer.style.display = "flex";
+
+    setTimeout(() => {
+      loaderContainer.style.display = "none";
+      chatContainer.style.display = "flex";
+      chatContainer.style.opacity = "1";
+      chatContainer.style.transform = "translateY(0)";
+
+      chatbox.innerHTML += `<p><strong></strong> ¡Hola ${userName}! Veo que tu animal es ${petName}, que tiene ${petAge} años. Vamos a hacer algunas preguntas sobre su salud para darte un diagnóstico.</p>`;
+      scrollToBottom();
+      askNextQuestion();
+    }, 2000);
+  });
+
+
+
+
+function askNextQuestion() {
+  if (currentQuestionIndex < yesNoQuestions.length) {
+    let question = yesNoQuestions[currentQuestionIndex];
+    // Aquí llamamos a displayQuestion con un retraso
+    setTimeout(() => {
+      displayQuestion(question); // Llama a la función para mostrar la pregunta
+      currentQuestionIndex++; // Incrementa el índice
+    }, 200); // 200 milisegundos de retraso
+  } else {
+    console.log("Respuestas del usuario:", userResponses); // Verificar respuestas
+    generateDiagnosis();
+  }
+}
+
+function displayQuestion(question) {
+  let questionHTML = `<img src="LOGO.png" alt="SENA" style="width: 40px; height: 40px; vertical-align: middle; border-radius: 50%;"> ${question}`; // Muestra la imagen y la pregunta
+  chatbox.innerHTML += `<p>${questionHTML}</p>`; // Agrega la pregunta al chat
+
+  scrollToBottom(); // Desplazar hacia abajo después de añadir un mensaje
+}
+
+
+    sendBtn.addEventListener("click", function() {
+      handleUserInput();
+    });
+  
+    function handleUserInput() {
+      let input = userInput.value.trim();
+      if (input === "") return;
+  
+      const lettersOnlyPattern = /^[a-zA-Z\s]+$/;
+      if (!lettersOnlyPattern.test(input)) {
+        chatbox.innerHTML += `<p><strong><img src="ARVE.png" alt="SENA" style="width: 40px; height: 40px; vertical-align: middle; border-radius: 50%;"></strong> Solo se permiten letras. Intenta de nuevo.</p>`;
+        userInput.value = "";
+        scrollToBottom(); // Desplazar hacia abajo
+        return;
+      }
+  
+      chatbox.innerHTML += `<p><strong>Tú:</strong> ${input}</p>`;
+      userInput.value = "";
+      let response = input.toLowerCase();
+  
+      if (response.includes("sí") || response.includes("si") || response.includes("no")) {
+        userResponses.push(response);
+        console.log("Respuesta guardada:", response); // Verificar que se guarde la respuesta
+        askNextQuestion();
+      } else {
+        chatbox.innerHTML += `<p><strong><img src="ARVE.png" alt="SENA" style="width: 40px; height: 40px; vertical-align: middle; border-radius: 50%;"></strong> Tu respuesta tiene que contener "sí" o "no". Intenta de nuevo.</p>`;
+      }
+      scrollToBottom(); // Desplazar hacia abajo
+    }
+  
+    userInput.addEventListener("keypress", function(e) {
+      if (e.key === "Enter") {
+        handleUserInput();
+      }
+    });
+  
+    function generateDiagnosis() {
+  let diagnosis = `Diagnóstico de salud para ${petName}:\n\n`;
+  let positiveResponses = userResponses.filter(response => response.includes("sí")).length;
+  let negativeResponses = userResponses.filter(response => response.includes("no")).length;
+
+  if (positiveResponses >= 5) {
+    diagnosis += `Por las respuestas que has dado, parece que ${petName} podría estar experimentando varios signos que requieren atención. `;
+    diagnosis += `Es muy recomendable que acudas al veterinario lo antes posible para realizar un examen más profundo y descartar posibles problemas graves. `;
+    
+    if (petAge >= 7) {
+      diagnosis += `Dado que ${petName} tiene ${petAge} años, su salud podría estar en una etapa donde las visitas regulares al veterinario son esenciales para prevenir o tratar problemas asociados con la vejez. Un monitoreo continuo es clave para mantener su bienestar. `;
+    } else {
+      diagnosis += `Aunque ${petName} aún es joven, detectar y tratar los problemas de salud a tiempo puede evitar complicaciones mayores en el futuro. `;
+    }
+
+    // Añadir recomendaciones específicas basadas en síntomas
+    diagnosis += `\nRecomendaciones adicionales:\n`;
+    diagnosis += `- Observa si ${petName} muestra signos como pérdida de apetito, fatiga, tos persistente, dificultad para moverse o cambios en su peso corporal. Esto podría indicar problemas como infecciones, enfermedades metabólicas o dolor.\n`;
+    diagnosis += `- Asegúrate de que ${petName} esté recibiendo suficiente hidratación, ya que la deshidratación puede empeorar su condición. Considera ofrecerle agua fresca y comida húmeda.\n`;
+    diagnosis += `- Proporciónale una dieta equilibrada y adecuada para su edad, raza y nivel de actividad. Consulta con un veterinario sobre opciones de alimentación que pueden mejorar su salud.\n`;
+    
+    diagnosis += `- Mantén un ambiente tranquilo y cómodo para ${petName}, ya que el estrés puede agravar problemas de salud. Crea un espacio acogedor donde pueda descansar y recuperarse.\n`;
+    diagnosis += `- Lleva un registro de cualquier otro síntoma, incluyendo cambios en la orina, heces o respiración, y compártelo con el veterinario durante la consulta.\n`;
+
+    // Consejos para síntomas específicos
+    diagnosis += `Consejos para síntomas específicos:\n`;
+    diagnosis += `- Si notas pérdida de apetito: Ofrece alimentos más atractivos o cálidos para estimular su interés. Si persiste, consulta a un veterinario sobre problemas digestivos o enfermedades.\n`;
+    diagnosis += `- Para la falta de energía: Asegúrate de que tenga tiempo para descansar. Si su actividad sigue baja, puede ser signo de una afección subyacente que necesita evaluación.\n`;
+    diagnosis += `- Si presenta vómitos o diarrea: Esto podría ser indicativo de infecciones o intolerancia alimentaria. Mantén una alimentación suave y controla su hidratación. Si estos síntomas continúan, busca atención veterinaria.\n`;
+
+    diagnosis += `- Si notas que ${petName} tiene dificultad para respirar o tos: Esto puede ser indicativo de problemas respiratorios, como infecciones o enfermedades cardíacas. Busca atención veterinaria inmediata si estos síntomas persisten.\n`;
+    diagnosis += `- Si observas cambios en el comportamiento, como agresividad o letargo: Estos pueden ser signos de dolor o malestar, y es importante consultar con un veterinario para determinar la causa.\n`;
+
+    diagnosis += `Recuerda que un diagnóstico temprano siempre mejora las opciones de tratamiento y la calidad de vida de tu animal.\n\n`;
+
+  } else if (negativeResponses >= 5) {
+    diagnosis += `Con base en tus respuestas, parece que ${petName} se encuentra en buen estado general de salud. `;
+    diagnosis += `¡Qué gran noticia! Sin embargo, nunca está de más estar atento a cualquier cambio en su comportamiento o en sus hábitos alimenticios. `;
+
+    if (petAge >= 7) {
+      diagnosis += `Dado que ${petName} ya tiene ${petAge} años, es recomendable programar chequeos preventivos más frecuentes, ya que con la edad pueden surgir condiciones que, detectadas a tiempo, son más fáciles de tratar.\n`;
+    } else {
+      diagnosis += `Si ${petName} es aún joven, asegúrate de mantener una alimentación balanceada y realizar chequeos regulares. La prevención es clave para asegurar una vida larga y saludable.\n`;
+    }
+
+    // Recomendaciones para mantener la buena salud
+    diagnosis += `\nRecomendaciones adicionales para mantener su bienestar:\n`;
+    diagnosis += `- Mantén una rutina de ejercicio regular para ${petName}. Paseos, juegos interactivos y estimulación mental son esenciales para su salud física y mental.\n`;
+    diagnosis += `- Realiza chequeos anuales con el veterinario, especialmente para las vacunas y la prevención de parásitos como pulgas y garrapatas.\n`;
+    diagnosis += `- Proporciona una dieta balanceada y evita darle alimentos tóxicos como chocolate, cebolla o uvas, que pueden afectar su salud.\n`;
+    diagnosis += `- Asegúrate de que su entorno sea seguro, evitando objetos pequeños que pueda tragar y manteniendo productos químicos lejos de su alcance.\n`;
+    diagnosis += `- Considera la socialización y el entrenamiento continuo. Mantener a ${petName} mentalmente estimulado es clave para su bienestar emocional.\n`;
+    diagnosis += `- Establece una rutina de cepillado y cuidado del pelaje para prevenir problemas de piel y mantenerlo limpio y saludable.\n`;
+    diagnosis += `- Asegúrate de que esté al día con sus desparasitaciones, ya que los parásitos pueden causar problemas de salud a largo plazo.\n`;
+
+    diagnosis += `Si notas algo inusual, no dudes en consultar a un veterinario. ¡Cuida mucho de tu animal!\n\n`;
+
+  } else {
+    diagnosis += `Con base en las respuestas que proporcionaste, no se pueden determinar conclusiones claras sobre la salud de ${petName}. Es posible que desees observar más de cerca su comportamiento y estado físico. `;
+    diagnosis += `No dudes en consultar con un veterinario si tienes alguna inquietud.\n\n`;
+
+    // Recomendaciones generales si el diagnóstico no es claro
+    diagnosis += `\nRecomendaciones adicionales:\n`;
+    diagnosis += `- Monitorea los hábitos alimenticios y el comportamiento de ${petName} en los próximos días. Presta atención a cambios en su energía, apetito o cualquier otro síntoma.\n`;
+    diagnosis += `- Si ${petName} muestra signos de debilidad o cambios repentinos, programa una visita con el veterinario para una revisión más detallada.\n`;
+    diagnosis += `- Considera realizar chequeos preventivos aunque no haya síntomas claros, ya que algunos problemas de salud no se detectan fácilmente sin un examen físico completo.\n`;
+    diagnosis += `- Revisa que ${petName} esté al día con sus vacunas y controles preventivos (desparasitaciones, control de pulgas, etc.).\n`;
+    diagnosis += `- Evalúa su entorno y asegúrate de que esté libre de peligros potenciales, como objetos afilados o sustancias tóxicas.\n`;
+    diagnosis += `- Observa cualquier cambio en su comportamiento, ya que a veces los animales pueden esconder su malestar. Si notas algo inusual, no dudes en consultar a un veterinario.\n`;
+  }
+
+  chatbox.innerHTML += `<p style="background: none; color: inherit;"><strong></strong> ${diagnosis}</p>`; // Mostrar diagnóstico aquí
+
+  document.getElementById('input-container').style.display = 'none'; // Oculta el contenedor de entrada
+
+  ratingContainer.style.display = "block"; // Mostrar la sección de calificación
+  scrollToBottom(); // Desplazar hacia abajo
+}
+  
+    // Lógica de calificación
+    const stars = document.querySelectorAll('.ec-stars-wrapper a');
+    stars.forEach(star => {
+      star.addEventListener('click', function(e) {
+        e.preventDefault();
+        const rating = this.getAttribute('data-value');
+       
+        chatbox.innerHTML += `<p style="background-color: #09a900; color: white; padding: 10px; border-radius: 8px;"><strong>¡Gracias por tu calificación de ${rating} estrella${rating > 1 ? 's' : ''}!</strong></p>`;
+  
+        ratingContainer.style.display = "none"; // Ocultar sección de calificación después de votar
+        scrollToBottom(); // Desplazar hacia abajo
+      });
+    });
+  </script>
+  
+</body>
+</html>

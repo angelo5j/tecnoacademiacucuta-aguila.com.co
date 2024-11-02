@@ -1,0 +1,58 @@
+body{
+    background-image: url(../img/fondo.png);
+}
+.chatbot-launcher {
+    box-sizing: border-box;
+    border-radius: 50%;
+    text-align: center;
+    background-color: transparent;
+    height: 200px;
+    width: 175px;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    border: none;
+    font-weight: bolder;
+    position: fixed;
+    outline: none;
+    right: 2rem;
+    bottom: 1rem;
+    z-index: 10;
+}  
+h1{
+    color: 	#7c0385;
+    font-size: 60px;
+    text-align: center;
+    font-family:"Josefin Sans";
+    font-weight:bold;
+
+}
+h2{
+    color: 	hwb(245 1% 64%);
+    text-shadow: 1px 1px 1px black;
+    font-size: 50px;
+    text-align: center;
+    font-family:"Josefin Sans";
+    font-weight:bold; 
+}
+span{
+    color: #09a900;
+    font-size: 70px;
+}
+body{
+    background-image: url(fondo.png);
+}
+.container{
+    justify-content: space-around;
+}
+
+div.card1{
+    background: #7c0385;
+    height: 180px;
+    border-radius: 30px;
+}
+div.card2{
+    background: #09a900;
+    height: 180px;
+    border-radius: 30px;
+}

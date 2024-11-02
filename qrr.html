@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modulo Campesena</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            display: flex;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            height: 100vh;
+            background-color: #e9ecef;
+        }
+        
+        .menu {
+            width: 240px;
+            height: 100vh;
+            padding: 20px;
+            background: #30a900;
+            color: white;
+            box-shadow: 4px 0 8px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-top-right-radius: 20px;
+            border-bottom-right-radius: 20px;
+            border-right: 2px solid #30a900;
+            transition: width 0.3s ease;
+        }
+
+        .menu button {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 10px;
+            background-color: #30a900;
+            color: white;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu button:hover {
+            background-color: #115500;
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .menu button i {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .header {
+            margin-top: -30px;
+            background-color: #30a900;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 20px 20px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .contenido {
+            padding: 20px;
+            flex-grow: 1;
+            background-color: #f4f4f4;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 300px;
+            overflow-y: auto;
+        }
+
+        .contenido img {
+            max-width: 80%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        #textoContenido {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .tarjetas {
+            display: none;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .card {
+            width: 180px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            text-align: center;
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .card-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+
+        .card-description {
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        @media (max-width: 600px) {
+            .menu {
+                width: 180px;
+            }
+        }
+        a{
+text-decoration: none;
+color: black;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu">
+        <button onclick="mostrarContenido('inicio')"><i class="fas fa-home"></i>Inicio</button>
+        <button onclick="mostrarContenido('animalAereo')"><i class="fas fa-dove"></i>Animal Aéreo</button>
+        <button onclick="mostrarContenido('animalTerrestre')"><i class="fas fa-paw"></i>Animal Terrestre</button>
+        <button onclick="mostrarContenido('animalAcuatico')"><i class="fas fa-fish"></i>Animal Acuático</button>
+        <a href="https://tecnoacademiacucuta.com"><button><i class="fas fa-sign-out-alt"></i>SALIR</button></a>
+    </div>
+
+    <div class="contenido" id="contenido">
+        <div class="header">BIENVENIDO A MODULO CAMPESENA</div>
+        <div id="textoContenido"></div>
+        <a href="aguila.html"><img id="imagenContenido" src="cuidado.jpg" alt="Cuidado"></a>
+        <div id="tarjetas" class="tarjetas"></div>
+    </div>
+
+
+    <script>
+        // Función para mostrar el contenido de acuerdo a la opción seleccionada
+        function mostrarContenido(opcion) {
+            const textoContenido = document.getElementById('textoContenido');
+            const imagenContenido = document.getElementById('imagenContenido');
+            const tarjetas = document.getElementById('tarjetas');
+            const contenido = document.getElementById('contenido');
+    
+            contenido.classList.remove('visible');
+            setTimeout(() => {
+                imagenContenido.style.display = 'none';
+                tarjetas.style.display = 'none';
+                tarjetas.innerHTML = '';
+
+                switch(opcion) {
+                    case 'inicio':
+                        textoContenido.textContent = '';
+                        imagenContenido.src = 'cuidado.jpg';
+                        imagenContenido.alt = 'cuidado.png';
+                        imagenContenido.style.display = 'block';
+                        break;
+                    case 'animalAereo':
+                        textoContenido.textContent = 'Descubre todo lo que necesitas saber sobre Los animales aéreos.';
+                        mostrarTarjetasAnimales(animalesAereos);
+                        break;
+                    case 'animalTerrestre':
+                        textoContenido.textContent = 'Descubre todo lo que necesitas saber sobre Los animales terrestres.';
+                        mostrarTarjetasAnimales(animalesTerrestres);
+                        break;
+                    case 'animalAcuatico':
+                        textoContenido.textContent = 'Descubre todo lo que necesitas saber sobre Los animales acuáticos.';
+                        mostrarTarjetasAnimales(animalesAcuaticos);
+                        break;
+                    default:
+                        textoContenido.textContent = 'Selecciona una opción del menú.';
+                }
+    
+                contenido.classList.add('visible');
+            }, 500);
+        }
+    
+         
+        const animalesTerrestres = [
+    { img: 'qr-vaca.png', title: 'Las Vacas', description: 'Descubre información fascinante sobre las vacas y su hábitat.' },
+    { img: 'qr-vaca.png', title: 'Los Toros', description: 'Conoce datos interesantes sobre los toros y sus características.' },
+    { img: 'qr-vaca.png', title: 'Las Gallinas', description: 'Explora el mundo de las gallinas y su importancia en la granja.' },
+    { img: 'qr-vaca.png', title: 'Los Perros', description: 'Aprende sobre la lealtad y habilidades de los perros como mascotas.' },
+    { img: 'qr-vaca.png', title: 'Los Gatos', description: 'Descubre la independencia y curiosidades de los gatos domésticos.' },
+    { img: 'qr-vaca.png', title: 'Los Caballos', description: 'Conoce la historia y el papel de los caballos en la humanidad.' },
+    { img: 'qr-vaca.png', title: 'Los Cerdos', description: 'Explora la inteligencia de los cerdos y su importancia en la agricultura.' },
+    { img: 'qr-vaca.png', title: 'Las Ovejas', description: 'Descubre el mundo de las ovejas y la producción de lana.' },
+];
+
+    
+        const animalesAereos = [
+            { img: 'qr-vaca.png', title: 'Águilas', description: 'Explora el majestuoso mundo de las águilas y su vuelo en las alturas.' },
+            { img: 'qr-vaca.png', title: 'Colibríes', description: 'Descubre la increíble agilidad y el colorido de los colibríes.' },
+            { img: 'qr-vaca.png', title: 'Búhos', description: 'Aprende sobre los búhos, su nocturnidad y sus habilidades de caza.' },
+            { img: 'qr-vaca.png', title: 'Pájaros Carpinteros', description: 'Conoce a los pájaros carpinteros y su distintivo sonido al picotear.' },
+            { img: 'qr-vaca.png', title: 'Flamingos', description: 'Descubre la belleza de los flamingos y sus características sociales.' },
+            { img: 'qr-vaca.png', title: 'Gaviotas', description: 'Aprende sobre las gaviotas y su adaptabilidad en entornos costeros.' },
+            { img: 'qr-vaca.png', title: 'Cernícalos', description: 'Conoce a los cernícalos y su papel en el control de plagas.' },
+            { img: 'qr-vaca.png', title: 'Albatros', description: 'Descubre la vida de los albatros y su capacidad para volar largas distancias.' },
+        ];
+    
+        const animalesAcuaticos = [
+            { img: 'qr-vaca.png', title: 'Peces', description: 'Explora el increíble mundo de los peces y sus hábitats acuáticos.' },
+            { img: 'qr-vaca.png', title: 'Delfines', description: 'Descubre la inteligencia y la sociabilidad de los delfines.' },
+            { img: 'qr-vaca.png', title: 'Tortugas', description: 'Aprende sobre las diferentes especies de tortugas y su vida marina.' },
+            { img: 'qr-vaca.png', title: 'Medusas', description: 'Conoce las fascinantes medusas y sus sorprendentes características.' },
+            { img: 'qr-vaca.png', title: 'Ballenas', description: 'Descubre el impresionante mundo de las ballenas y su migración.' },
+            { img: 'qr-vaca.png', title: 'Salmón', description: 'Aprende sobre el ciclo de vida del salmón y su importancia ecológica.' },
+            { img: 'qr-vaca.png', title: 'Tiburones', description: 'Conoce a los tiburones y su rol en el ecosistema marino.' },
+            { img: 'qr-vaca.png', title: 'Pulpos', description: 'Descubre la inteligencia y las habilidades del pulpo.' },
+        ];
+    
+        // Función para mostrar las tarjetas de los animales
+        function mostrarTarjetasAnimales(animales) {
+            const tarjetas = document.getElementById('tarjetas');
+            tarjetas.style.display = 'flex';
+            animales.forEach(animal => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <img src="${animal.img}" alt="${animal.title}">
+                    <div class="card-title">${animal.title}</div>
+                    <div class="card-description">${animal.description}</div>
+                `;
+                tarjetas.appendChild(card);
+            });
+        }
+
+        // Mostrar contenido por defecto
+        window.onload = () => {
+            mostrarContenido('inicio');
+        };
+    </script>
+</body>
+</html>

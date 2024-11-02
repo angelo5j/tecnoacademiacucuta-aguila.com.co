@@ -1,0 +1,15 @@
+.fondo{
+    height: 100%;
+    width: 100%;
+    border-radius: 0px 0px 60px 0px;
+ }
+ .contact-info{
+     margin: 0;
+     padding: 0;
+ }
+ h3{
+    text-align: center;
+    color: #09a900;
+    font-size: 35px;
+
+ }

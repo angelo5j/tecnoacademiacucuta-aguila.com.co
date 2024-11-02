@@ -1,0 +1,269 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campesena</title>
+    <link rel="stylesheet" href="estilo1.css">
+        <link rel="shortcut icon" href="portada.png" type="image/x-icon">
+</head>
+<body>
+  <style>
+    body {
+      font-family: 'Helvetica', sans-serif;
+      background: linear-gradient(135deg, #e1f5fe, #ffffff);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .chat-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 75px;
+      height: 75px;
+      border-radius: 50%;
+
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      margin-left: -15px;
+    }
+
+    .chat-icon {
+      width: 95%;
+      height: auto;
+      transition: transform 0.3s ease, filter 0.3s ease;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    
+    }
+
+    .chat-button:hover .chat-icon {
+      transform: scale(1.3);
+      filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4));
+    }
+
+    .chat-button:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5);
+      
+    }
+
+
+    .chat-container {
+      display: none;
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      width: 400px;
+      height: 650px;
+      border: 3px solid #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      background-color: #ffffff;
+      animation: slideUp 0.5s ease forwards;
+      overflow: hidden;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .chat-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .chat-header {
+      background: linear-gradient(45deg, #ffffff, #ffffff);
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-size: 22px;
+      position: relative;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      letter-spacing: 1px;
+    }
+
+    .chat-header .close-btn {
+      position: absolute;
+      right: 5px;
+      top: -8px;
+      margin-left: 5px;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 40px;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .chat-header .close-btn:hover {
+      color: #ff0000;
+    }
+
+    span.a1 { color: #bf00ff; font-size: 1.2em; letter-spacing: 1px; }
+    span.a2 { color: #009705; font-size: 1.2em; letter-spacing: 1px; }
+    span.a3 { color: #000000; font-size: 1.2em; letter-spacing: 1px; }
+    .a4 { color: red; font-weight: bold; font-size: 1.2em; }
+    .a5 { color: white; font-weight: bold; font-size: 1.2em; }
+
+    .chat-button, .close-btn { transition: all 0.3s ease; }
+
+    @media (max-width: 600px) {
+      .chat-container { width: 90%; height: 80vh; }
+      .chat-button { width: 60px; height: 60px; }
+    }
+    figure {
+            border-radius: 100%;
+            display: block;
+            height: 150px;
+            position: relative;
+            width: 150px;
+        }
+        figure:after {
+          font-family: sans-serif;
+          opacity: 0;
+            border-radius: 5px;
+            color: #d400ff;
+            font-size: 0.8em;
+            content: attr(title);
+            opacity: 0;
+            padding: 6px 12px;
+            position: absolute;
+            left: 50%;
+            top: 170%;
+            transform: translateX(-50%);
+            transition: all .25s ease;
+            visibility: hidden;
+            white-space: nowrap;
+            bottom: 110%;
+            margin-left: 410%;
+
+     
+        }
+
+        figure:hover:after {
+            opacity: 1;
+            visibility: visible;
+        }
+  </style>
+</head>
+<body>
+
+  <h1>  CAMPE <span>SENA</span></h1>
+  <h2>Tecnoacademia Cúcuta</h2>
+  <br><br><br><br>
+      <center>
+  <div class="container">
+      <div class="row">
+           <div class= "col -md-4"> 
+             <div class="card1 text-black mb-3" style="max-width: 18rem;">
+              <div class="card-header"> INSERTAR   </div>
+                 <div class="card-body">
+                     <h5 class="card-title"> <img src="toro (1).png" width="70" heigth="70"> &nbsp; Registro Nuevo</h5>                  
+                       <a class="nav-link" href="form.html"><small class="aa">Ir al Modulo &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <img src="fecha.png" width="30" heigth="30"></small></a>
+                  </div>
+               </div>
+             </div>
+           
+  
+           <div class= "col -md-4"> 
+           <div class="card2 text-white mb-3" style="max-width: 18rem;">
+              <div class="card-header"> LEER QR   </div>
+                 <div class="card-body">
+                     <h5 class="card-title"> <img src="code.png" width="70" heigth="70"> &nbsp;&nbsp;Leer Codigo QR</h5>                   
+                       <a class="nav-link" href="qrr.html"><small class="aa">Ir al Modulo &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <img src="fecha.png" width="30" heigth="30"> </small></a>
+                  </div>
+               </div>
+           </div>    
+  
+  
+          </center>
+          <br>
+    <div class="chat-button" id="chatButton">    
+    <img src="LOGO.png" alt="Chat" class="chat-icon">
+  </div>
+</figure>
+  <div class="chat-container" id="chatContainer">
+    <div class="chat-header">
+      <span class="a3"> Chat de </span><span class="a1">Campe</span><span class="a2">sena</span>
+      <button class="close-btn" id="closeChat">&times;</button>
+    </div>
+    <iframe src="chat-bot.html"></iframe>
+
+  </div>
+<br><br><br>
+  <script>
+    const chatButton = document.getElementById("chatButton");
+    const chatContainer = document.getElementById("chatContainer");
+    const closeChat = document.getElementById("closeChat");
+    const tooltip = document.getElementById("chatTooltip");
+    let tooltipTimeout;
+
+    chatButton.addEventListener("click", function() {
+      const isOpen = chatContainer.style.display === "block";
+      chatContainer.style.display = isOpen ? "none" : "block";
+      tooltip.style.display = isOpen ? 'block' : 'none'; // Muestra el tooltip si el chat se cierra
+      tooltip.style.opacity = isOpen ? '1' : '0'; // Ajusta la opacidad del tooltip
+    });
+
+    closeChat.addEventListener("click", function() {
+      chatContainer.style.display = "none";
+      tooltip.style.display = 'block'; // Mostrar el tooltip al cerrar
+      tooltip.style.opacity = '1'; // Asegúrate de que la opacidad sea visible
+    });
+
+    chatButton.addEventListener("mouseover", function() {
+      if (chatContainer.style.display !== "block") {
+        tooltipTimeout = setTimeout(() => {
+          tooltip.style.display = 'block';
+          tooltip.style.opacity = '1';
+        }, 300); // Retraso de 300 ms antes de mostrar el tooltip
+      }
+    });
+
+    chatButton.addEventListener("mouseout", function() {
+      clearTimeout(tooltipTimeout); // Limpiar el timeout si se sale del botón
+      if (chatContainer.style.display !== "block") {
+        tooltip.style.display = 'none';
+      }
+    });
+
+    chatContainer.addEventListener("mouseover", function() {
+      tooltip.style.display = 'none';
+    });
+    
+    chatContainer.addEventListener("mouseout", function() {
+      tooltip.style.display = 'none';
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+
+</body>
+</html>
